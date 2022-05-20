@@ -1,0 +1,107 @@
+{
+    "platillos": [
+      {
+        "id": 1,
+        "nombre": "Pizza a la Leña Chica",
+        "precio": 30,
+        "categoria": 1,
+        "url":"/img/pizza-a-la-leña-chica.jpg",
+        
+    
+      },
+      {
+        "id": 2,
+        "nombre": "Pizza a la Leña Mediana",
+        "precio": 50,
+        "categoria": 1,
+        "url":"/img/pizza-a-la-leña-mediana.jpg"
+      },
+      {
+        "id": 3,
+        "nombre": "Rebanada de Pay de Limón",
+        "precio": 30,
+        "categoria": 3,
+        "url":"/img/rebanada-de-pay-de-limón.jpg"
+      },
+      {
+        "id": 4,
+        "nombre": "Rebanada de Pastel de Chocolate",
+        "precio": 30,
+        "categoria": 3,
+        "url":"/img/rebanada-de-pastel-de-chocolate.jpg"
+      },
+      {
+        "id": 5,
+        "nombre": "Jugo de Naranja",
+        "precio": 15,
+        "categoria": 2,
+        "url":"/img/jugo-de-naranja.jpg"
+      },
+      {
+        "id": 6,
+        "nombre": "Pizza a la Leña Grande",
+        "precio": 70,
+        "categoria": 1,
+        "url":"/img/pizza-a-la-leña-grande.jpg"
+      },
+      {
+        "id": 7,
+        "nombre": "Rib Eye 800g",
+        "precio": 100,
+        "categoria": 1,
+        "url":"/img/Rib-Eye-800g.jpg"
+      },
+     
+      {
+        "id": 8,
+        "nombre": "Tequila",
+        "precio": 40,
+        "categoria": 2,
+        "url":"/img/tequila.jpg"
+      },
+      {
+        "id": 9,
+        "nombre": "Rebanada de Pay de Queso",
+        "precio": 30,
+        "categoria": 3,
+        "url":"/img/rebanada-de-pay-de-queso.jpg"
+      },
+      {
+        "id": 10,
+        "nombre": "Café Americano",
+        "precio": 20,
+        "categoria": 2,
+        "url":"/img/cafe-americano.jpg"
+      },
+      {
+        "id": 11,
+        "nombre": "Café Capuchino",
+        "precio": 40,
+        "categoria": 2,
+        "url":"/img/cafe-capuchino.jpg"
+      },
+      {
+        "id": 12,
+        "nombre": "pabellon criollo",
+        "precio": 65,
+        "categoria": 6,
+        "url":"/img/pabellon-criollo.jpg"
+      },
+      {
+        "id": 13,
+        "nombre": "torta tres leches",
+        "precio": 89,
+        "categoria": 6,
+        "url":"/img/torta-tres-leches.jpg"
+       
+      },
+      {
+        "id": 14,
+        "nombre": "pollo a la brasa",
+        "precio": 35,
+        "categoria": 6,
+        "url":"/img/pollo-ala-brasa.jpg"
+      }
+
+    ]
+  }
