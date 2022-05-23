@@ -3,8 +3,20 @@
 const ListaMenus = document.querySelector("#root");
 const resumenPedido = document.querySelector("table tbody");
 const Totalconsumos=document.querySelector("#totalConsumo");
+const mesaNUmero=document.querySelector("#Mesa");
+const mozo=document.querySelector("#Mozo")
+const BtnGuardarPedido=document.querySelector("#btnGuardar")
+
+let EditarPedido=false;
+
+
+
+
+ListaMesas=[]
 
 const mesa={
+    mesa:"",
+    mozo:"",
    Pedido:[] 
 }
 
@@ -17,6 +29,8 @@ const categorias={
 
 
 document.addEventListener("DOMContentLoaded", llamarApi);
+BtnGuardarPedido.addEventListener("click",ListaDeMesas)
+
 
 function llamarApi() {
   fetch("http://localhost:4000/platillos")
@@ -34,7 +48,7 @@ function MostrarMenus(response) {
     const { nombre, precio, descripcion, url } = element;
 
     const div = document.createElement("div");
-    div.classList.add("col-md-3", "card", "mt-3", "mx-2", "mx-auto","h-10");
+    div.classList.add("col-md-3", "card", "mt-3", "mx-2", "mx-auto","h-10","my-1");
     div.style.width = "10rem";
 
     const parrafo = document.createElement("p");
@@ -52,7 +66,23 @@ function MostrarMenus(response) {
     Button.innerHTML = "Agregar";
     Button.onclick= function() {
         
-        agregarPedido({...element,cantidad:1});
+            const VaciosCampos=[mesaNUmero.value,mozo.value].some(campo=>campo==="");
+
+            if(VaciosCampos){
+
+                swal({
+                    title: "Atencion!",
+                    text: "Debes seleccionar la mesa y el mozo !",
+                    icon: "error",
+                });
+            }else{
+
+                mesa.mesa=mesaNUmero.value;
+                mesa.mozo=mozo.value;
+
+                agregarPedido({...element,cantidad:1});
+
+            }
     }
 
 
@@ -67,6 +97,7 @@ function MostrarMenus(response) {
 }
 
 function agregarPedido(Menu){
+
 
 const {Pedido} = mesa;
 
@@ -84,17 +115,15 @@ if(existemenu){
 
 
 }else{
-    mesa.Pedido=[...Pedido, Menu];
-
-  
+    mesa.Pedido=[...Pedido, Menu]; 
 }
 
 mostrarResumen(mesa.Pedido)
+BtnGuardarPedido.classList.remove("d-none");
 }
 
 function mostrarResumen(ListaMenus){
 
-    
     while(resumenPedido.firstChild){
         resumenPedido.removeChild(resumenPedido.firstChild);
     }
@@ -115,7 +144,13 @@ function mostrarResumen(ListaMenus){
         `;
         resumenPedido.appendChild(fila);
     })
+
+    document.querySelector("#mesaCliente").innerHTML=`<h3>Mesa: ${mesa.mesa}</h3>`;
+    document.querySelector("#mesaMozo").innerHTML=`<h3>Mozo: ${mesa.mozo}</h3>`;
     CalcularTotal()
+    
+
+   
 }
 
 function eliminarPedido(id){
@@ -154,4 +189,107 @@ return total+plato.precio*plato.cantidad;
     },0)
 
     Totalconsumos.innerHTML=`<h3>Total Consumido: $ ${total}</h3>`;
+}
+
+///agregar al listado de mesas
+
+function ListaDeMesas() {
+
+    while(resumenPedido.firstChild){
+        resumenPedido.removeChild(resumenPedido.firstChild);
+    }
+
+    mesaNUmero.value="";
+    mozo.value="";
+
+    BtnGuardarPedido.classList.add("d-none");
+
+    document.querySelector("#mesaCliente").innerHTML=``;
+    document.querySelector("#mesaMozo").innerHTML=``;
+    Totalconsumos.innerHTML=``;
+
+
+if(EditarPedido){
+    
+console.error("estas en editar")
+
+
+
+}else{
+    const ExisteMesaGuardada=ListaMesas.some(Plato=> Plato.mesa===mesa.mesa);
+
+    if(ExisteMesaGuardada){
+        swal({
+            title: "Atencion!",
+            text: "La mesa ya esta ocupada!",
+            icon: "error",
+        });
+    
+    }else{
+    
+        ListaMesas.push({...mesa});
+    }
+    
+    
+      mesa.mesa="";
+      mesa.mozo="";
+      mesa.Pedido=[];
+    
+    
+    MostrarPedidoGuardados(ListaMesas)
+
+
+}
+
+
+}
+
+function MostrarPedidoGuardados(mesasOcupada){
+
+
+const ListaMesaLLenas=document.querySelector("#mesaLlena");
+
+while(ListaMesaLLenas.firstChild){
+
+    ListaMesaLLenas.removeChild(ListaMesaLLenas.firstChild);
+
+}
+
+    mesasOcupada.forEach(mesaUsada=>{
+
+const DivPrincipal=document.createElement("div");
+DivPrincipal.classList.add("col-12");
+const Parrafo= document.createElement("p");
+Parrafo.innerHTML=`<h5>Mesa: ${mesaUsada.mesa} Mozo: ${mesaUsada.mozo}</h5>`;
+const Button=document.createElement("button");
+Button.classList.add("btn", "btn-danger", "btn-block");
+Button.innerHTML="Editar";
+
+Button.onclick=function(){
+
+    mesa.mesa=mesaUsada.mesa;
+    mesa.mozo=mesaUsada.mozo;
+    mesa.Pedido=mesaUsada.Pedido;
+   
+    mostrarResumen(mesaUsada.Pedido)
+
+    BtnGuardarPedido.classList.remove("d-none");
+    BtnGuardarPedido.textContent="Editar Pedido";
+    EditarPedido=true;
+
+    mesaNUmero.value=mesa.mesa
+    mozo.value=mesa.mozo
+}
+Parrafo.appendChild(Button);
+
+
+DivPrincipal.appendChild(Parrafo);
+
+ListaMesaLLenas.appendChild(DivPrincipal);
+
+    })
+
+    
+
+
 }

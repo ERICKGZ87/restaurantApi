@@ -1,0 +1,14 @@
+
+body{
+
+    background-color: #1ABC9C ;
+}
+.headerPrincipal{
+
+    background-image:url("/img/rest-header.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 30vh;
+
+}

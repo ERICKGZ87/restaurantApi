@@ -5,9 +5,7 @@
         "nombre": "Pizza a la Leña Chica",
         "precio": 30,
         "categoria": 1,
-        "url":"/img/pizza-a-la-leña-chica.jpg",
-        
-    
+        "url":"/img/pizza-a-la-leña-chica.jpg"
       },
       {
         "id": 2,
@@ -101,6 +99,14 @@
         "precio": 35,
         "categoria": 6,
         "url":"/img/pollo-ala-brasa.jpg"
+      },
+      {
+        "id": 15,
+        "nombre": "Jugo Fresa",
+        "precio": 21,
+        "categoria": 6,
+        "url":"/img/jugo-fresa.jpg"
+       
       }
 
     ]
