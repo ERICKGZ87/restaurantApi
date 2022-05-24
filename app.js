@@ -9,9 +9,6 @@ const BtnGuardarPedido=document.querySelector("#btnGuardar")
 
 let EditarPedido=false;
 
-
-
-
 ListaMesas=[]
 
 const mesa={
@@ -33,10 +30,26 @@ BtnGuardarPedido.addEventListener("click",ListaDeMesas)
 
 
 function llamarApi() {
-  fetch("http://localhost:4000/platillos")
+
+  fetch("http://localhost:4000/platill")
     .then((response) => response.json())
-    .then((response) => MostrarMenus(response))
-    .catch((err) => console.error(err));
+    .then((response) => {
+        
+        if(response) {
+    
+            MostrarMenus(response)
+
+        }
+        })
+        .catch((err) => 
+        
+        fetch("db.json")
+        .then((response) => response.json())
+        .then((response) => {
+
+            MostrarMenus(response.platillos)
+        }));
+    
 }
 
 function MostrarMenus(response) {
@@ -97,7 +110,6 @@ function MostrarMenus(response) {
 }
 
 function agregarPedido(Menu){
-
 
 const {Pedido} = mesa;
 
@@ -232,6 +244,11 @@ BtnGuardarPedido.textContent="Guardar";
 mesaNUmero.readOnly=false;
 mozo.disabled=false;
 
+swal({
+    title: "Pedido Editado!",
+    icon: "success",
+});
+
 }else{
     const ExisteMesaGuardada=ListaMesas.some(Plato=> Plato.mesa===mesa.mesa);
 
@@ -256,6 +273,10 @@ mozo.disabled=false;
     
     MostrarPedidoGuardados(ListaMesas)
 
+    swal({
+        title: "Pedido Guardado!",
+        icon: "success",
+    });
 
 }
 
@@ -263,7 +284,6 @@ mozo.disabled=false;
 }
 
 function MostrarPedidoGuardados(mesasOcupada){
-
 
 const ListaMesaLLenas=document.querySelector("#mesaLlena");
 
@@ -280,7 +300,7 @@ DivPrincipal.classList.add("col-12");
 const Parrafo= document.createElement("p");
 Parrafo.innerHTML=`<h5>Mesa: ${mesaUsada.mesa} Mozo: ${mesaUsada.mozo}</h5>`;
 const Button=document.createElement("button");
-Button.classList.add("btn", "btn-danger", "btn-block","mx-1");
+Button.classList.add("btn", "btn-warning", "btn-block","mx-1");
 
 Button.innerHTML="Editar";
 
@@ -310,34 +330,75 @@ Button.onclick=function(){
 
 const ButtonEliminar=document.createElement("button");
 ButtonEliminar.classList.add("btn", "btn-danger", "btn-block", "mx-1");
-ButtonEliminar.innerHTML="Eliminar";
+ButtonEliminar.innerHTML="Borrar";
+
 ButtonEliminar.onclick=function(){
 
-    while(ListaMesaLLenas.firstChild){
+    swal({
+        title: "Estas seguro que deseas Eliminar el Pedido?",
+        text: "Esta accion es irreversible !",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+    .then((value) => {
 
-        ListaMesaLLenas.removeChild(ListaMesaLLenas.firstChild);
+        if(value){
+
+            while(ListaMesaLLenas.firstChild){
+
+                ListaMesaLLenas.removeChild(ListaMesaLLenas.firstChild);
+            
+            }
     
-    }
+            while(resumenPedido.firstChild){
+                resumenPedido.removeChild(resumenPedido.firstChild);
+            }
+    
+            mesaNUmero.value="";
+            mozo.value="";
+            BtnGuardarPedido.classList.add("d-none");
+    
+            document.querySelector("#mesaCliente").innerHTML=``;
+            document.querySelector("#mesaMozo").innerHTML=``;
+            Totalconsumos.innerHTML=``;
+    
+            ListaMesas=ListaMesas.filter(mesa=>mesa.mesa!==mesaUsada.mesa);
+            MostrarPedidoGuardados(ListaMesas)
 
-    while(resumenPedido.firstChild){
-        resumenPedido.removeChild(resumenPedido.firstChild);
-    }
+           
+            
+            swal({
+                title: "Pedido Eliminado!",
+                icon: "success",
+            });
 
-    mesaNUmero.value="";
-    mozo.value="";
-    BtnGuardarPedido.classList.add("d-none");
+        }
 
-    document.querySelector("#mesaCliente").innerHTML=``;
-    document.querySelector("#mesaMozo").innerHTML=``;
-    Totalconsumos.innerHTML=``;
+             
+    });
 
-    ListaMesas=ListaMesas.filter(mesa=>mesa.mesa!==mesaUsada.mesa);
-    MostrarPedidoGuardados(ListaMesas)
 }
+
+const ButtonEmitirBoleta=document.createElement("div");
+ButtonEmitirBoleta.innerHTML=`<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+Boleta
+</button>`;
+
+
+ButtonEmitirBoleta.onclick=function(){
+    
+    mesa.mesa=  mesaUsada.mesa;
+    mesa.mozo=  mesaUsada.mozo;
+    CrearBoleta(mesaUsada.Pedido)
+
+}
+
 
 
 Parrafo.appendChild(Button);
 Parrafo.appendChild(ButtonEliminar);
+Parrafo.appendChild(ButtonEmitirBoleta);
 
 
 DivPrincipal.appendChild(Parrafo);
@@ -346,7 +407,80 @@ ListaMesaLLenas.appendChild(DivPrincipal);
 
     })
 
+}
+
+function CrearBoleta(Mesas){
+console.log("🚀 ~ file: app.js ~ line 395 ~ CrearBoleta ~ Mesas", Mesas)
+
+
+    const fechaBoleta= document.querySelector("#fechaBoleta");
+    const mesaBoleta= document.querySelector("#mesaBoleta");
+    const mozoBoleta= document.querySelector("#mozoBoleta");
+
+    const BoletaResumen=document.querySelector("#BoletaResumen")
+    const TotalDiv=document.querySelector("#TotalAcobrar")
+
+    let fecha=moment().format('DD/MM/YYYY HH:mm'); 
+    fechaBoleta.innerHTML=fecha;
+
+    mesaBoleta.innerHTML=`${mesa.mesa}`
+    mozoBoleta.innerHTML=`${mesa.mozo}`
+
+    while(BoletaResumen.firstChild){
+
+        BoletaResumen.removeChild(BoletaResumen.firstChild);
     
+    }
+
+    
+    while(TotalDiv.firstChild){
+
+        TotalDiv.removeChild(TotalDiv.firstChild);
+    
+    }
+
+const Div= document.createElement("div");
+Div.classList.add("row", "align-items-end");
+
+const SubtotalApagar=Mesas.reduce((total, plato)=>total+plato.cantidad*plato.precio,0)
+const Propina=SubtotalApagar*0.10
+const Total=SubtotalApagar+Propina
+
+const Subtotal= document.createElement("h3");
+Subtotal.classList.add("text-right","my-2");
+Subtotal.innerHTML=`<h3>Sub-total: ${SubtotalApagar}</h3>`;
+
+const PropinaApagar= document.createElement("h3");
+PropinaApagar.classList.add("text-right");
+PropinaApagar.innerHTML=`<h3>Propina: ${Propina}</h3>`;
+
+const TotalApagar= document.createElement("h3");
+TotalApagar.classList.add("text-right");
+TotalApagar.innerHTML=`<h3>Total: ${Total}</h3>`;
 
 
+    Mesas.forEach(plato=>{
+
+        const {nombre,precio,cantidad,url}=plato;
+
+        const fila=document.createElement("tr");
+        fila.innerHTML=`
+        <td>${nombre}<img src="${url}" alt="" style="width:70px;height: 40px;" class="mx-3 rounded"></td>
+        <td >${cantidad}</td>
+        <td>${precio}</td>
+        <td>${precio*cantidad}</td>
+        `;
+
+        Div.appendChild(fila);
+        Div.appendChild(Subtotal);
+        Div.appendChild(PropinaApagar);
+        Div.appendChild(TotalApagar);
+
+
+        document.querySelector("#BoletaResumen").appendChild(fila);
+        document.querySelector("#TotalAcobrar").appendChild(Div);
+       
+       
+    })
+   
 }
