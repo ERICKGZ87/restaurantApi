@@ -129,6 +129,7 @@ function mostrarResumen(ListaMenus){
     }
 
     ListaMenus.forEach(plato=>{
+
         const {nombre,precio,cantidad,url}=plato;
 
         const fila=document.createElement("tr");
@@ -211,9 +212,25 @@ function ListaDeMesas() {
 
 if(EditarPedido){
     
-console.error("estas en editar")
+ListaMesas.map(me=>{
 
+    if(me.mesa===mesa.mesa){
+        me.mesa=mesa.mesa;
+        me.mozo=mesa.mozo;
+        me.Pedido=mesa.Pedido;
+    }
+    return me;
+})
+   
+mesa.mesa="";
+mesa.mozo="";
+mesa.Pedido=[];
 
+EditarPedido=false;
+BtnGuardarPedido.textContent="Guardar";
+
+mesaNUmero.readOnly=false;
+mozo.disabled=false;
 
 }else{
     const ExisteMesaGuardada=ListaMesas.some(Plato=> Plato.mesa===mesa.mesa);
@@ -228,6 +245,7 @@ console.error("estas en editar")
     }else{
     
         ListaMesas.push({...mesa});
+       console.log(ListaMesas); 
     }
     
     
@@ -262,7 +280,8 @@ DivPrincipal.classList.add("col-12");
 const Parrafo= document.createElement("p");
 Parrafo.innerHTML=`<h5>Mesa: ${mesaUsada.mesa} Mozo: ${mesaUsada.mozo}</h5>`;
 const Button=document.createElement("button");
-Button.classList.add("btn", "btn-danger", "btn-block");
+Button.classList.add("btn", "btn-danger", "btn-block","mx-1");
+
 Button.innerHTML="Editar";
 
 Button.onclick=function(){
@@ -271,16 +290,54 @@ Button.onclick=function(){
     mesa.mozo=mesaUsada.mozo;
     mesa.Pedido=mesaUsada.Pedido;
    
-    mostrarResumen(mesaUsada.Pedido)
+ 
 
     BtnGuardarPedido.classList.remove("d-none");
     BtnGuardarPedido.textContent="Editar Pedido";
+
     EditarPedido=true;
 
     mesaNUmero.value=mesa.mesa
     mozo.value=mesa.mozo
+    mesaNUmero.readOnly=true
+    mozo.disabled=true
+
+
+    mostrarResumen(mesaUsada.Pedido)
+
+    console.log(mesa)
 }
+
+const ButtonEliminar=document.createElement("button");
+ButtonEliminar.classList.add("btn", "btn-danger", "btn-block", "mx-1");
+ButtonEliminar.innerHTML="Eliminar";
+ButtonEliminar.onclick=function(){
+
+    while(ListaMesaLLenas.firstChild){
+
+        ListaMesaLLenas.removeChild(ListaMesaLLenas.firstChild);
+    
+    }
+
+    while(resumenPedido.firstChild){
+        resumenPedido.removeChild(resumenPedido.firstChild);
+    }
+
+    mesaNUmero.value="";
+    mozo.value="";
+    BtnGuardarPedido.classList.add("d-none");
+
+    document.querySelector("#mesaCliente").innerHTML=``;
+    document.querySelector("#mesaMozo").innerHTML=``;
+    Totalconsumos.innerHTML=``;
+
+    ListaMesas=ListaMesas.filter(mesa=>mesa.mesa!==mesaUsada.mesa);
+    MostrarPedidoGuardados(ListaMesas)
+}
+
+
 Parrafo.appendChild(Button);
+Parrafo.appendChild(ButtonEliminar);
 
 
 DivPrincipal.appendChild(Parrafo);
