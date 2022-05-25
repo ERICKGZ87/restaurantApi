@@ -31,7 +31,7 @@ BtnGuardarPedido.addEventListener("click",ListaDeMesas)
 
 function llamarApi() {
 
-  fetch("http://localhost:4000/platill")
+  fetch("http://localhost:4000/platillos")
     .then((response) => response.json())
     .then((response) => {
         
@@ -250,9 +250,13 @@ swal({
 });
 
 }else{
-    const ExisteMesaGuardada=ListaMesas.some(Plato=> Plato.mesa===mesa.mesa);
+    
+    const ExisteMesaGuardada=ListaMesas.some(Plato=> Plato.mesa==mesa.mesa);
+
+    console.log("🚀 ~ file: app.js ~ line 255 ~ ListaDeMesas ~ ExisteMesaGuardada", ExisteMesaGuardada)
 
     if(ExisteMesaGuardada){
+
         swal({
             title: "Atencion!",
             text: "La mesa ya esta ocupada!",
@@ -263,20 +267,17 @@ swal({
     
         ListaMesas.push({...mesa});
        console.log(ListaMesas); 
+       MostrarPedidoGuardados(ListaMesas)
+       swal({
+        title: "Pedido Guardado!",
+        icon: "success",
+    });
     }
     
     
       mesa.mesa="";
       mesa.mozo="";
       mesa.Pedido=[];
-    
-    
-    MostrarPedidoGuardados(ListaMesas)
-
-    swal({
-        title: "Pedido Guardado!",
-        icon: "success",
-    });
 
 }
 
@@ -296,7 +297,7 @@ while(ListaMesaLLenas.firstChild){
     mesasOcupada.forEach(mesaUsada=>{
 
 const DivPrincipal=document.createElement("div");
-DivPrincipal.classList.add("col-12");
+DivPrincipal.classList.add("col-sm-12","shadow","rounded","bg-gradient","border-bottom");
 const Parrafo= document.createElement("p");
 Parrafo.innerHTML=`<h5>Mesa: ${mesaUsada.mesa} Mozo: ${mesaUsada.mozo}</h5>`;
 const Button=document.createElement("button");
@@ -372,7 +373,8 @@ ButtonEliminar.onclick=function(){
                 title: "Pedido Eliminado!",
                 icon: "success",
             });
-
+            mesaNUmero.readOnly=false
+            mozo.disabled=false
         }
 
              
