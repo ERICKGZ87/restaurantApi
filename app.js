@@ -297,7 +297,7 @@ while(ListaMesaLLenas.firstChild){
     mesasOcupada.forEach(mesaUsada=>{
 
 const DivPrincipal=document.createElement("div");
-DivPrincipal.classList.add("col-sm-12","shadow","rounded","bg-gradient","border-bottom");
+DivPrincipal.classList.add("col-sm-12","shadow","rounded","bg-gradient","border-bottom","justify-content-start");
 const Parrafo= document.createElement("p");
 Parrafo.innerHTML=`<h5>Mesa: ${mesaUsada.mesa} Mozo: ${mesaUsada.mozo}</h5>`;
 const Button=document.createElement("button");
@@ -382,13 +382,13 @@ ButtonEliminar.onclick=function(){
 
 }
 
-const ButtonEmitirBoleta=document.createElement("div");
-ButtonEmitirBoleta.innerHTML=`<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-Boleta
-</button>`;
+const buttonBoleta= document.createElement("button");
+buttonBoleta.classList.add("btn", "btn-success", "btn-block","mx-1");
+buttonBoleta.setAttribute("data-bs-toggle","modal");
+buttonBoleta.setAttribute("data-bs-target","#exampleModal");
+buttonBoleta.innerHTML="Boleta";
 
-
-ButtonEmitirBoleta.onclick=function(){
+buttonBoleta.onclick=function(){
     
     mesa.mesa=  mesaUsada.mesa;
     mesa.mozo=  mesaUsada.mozo;
@@ -400,7 +400,7 @@ ButtonEmitirBoleta.onclick=function(){
 
 Parrafo.appendChild(Button);
 Parrafo.appendChild(ButtonEliminar);
-Parrafo.appendChild(ButtonEmitirBoleta);
+Parrafo.appendChild(buttonBoleta);
 
 
 DivPrincipal.appendChild(Parrafo);
